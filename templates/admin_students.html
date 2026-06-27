@@ -22,7 +22,7 @@ body{display:flex;flex-direction:column;min-height:100vh}
 .table-header h3{font-size:15px;font-weight:700}
 .search-box{background:#1a2d50;border:1px solid #2a4070;border-radius:6px;padding:6px 12px;color:#fff;font-size:13px;width:200px}
 .search-box:focus{outline:none;border-color:var(--blue3)}
-.action-btn{padding:5px 10px;font-size:11px;border:none;border-radius:4px;cursor:pointer;font-weight:600}
+.action-btn{padding:5px 10px;font-size:11px;border:none;border-radius:4px;cursor:pointer;font-weight:600;text-decoration:none;display:inline-block}
 .footer-bar{background:var(--navy2);border-top:1px solid #1a2d50;padding:10px 24px;font-size:11px;color:#3a5070}
 </style>
 <script>
@@ -116,7 +116,10 @@ function filterTable(){
           <tr style="cursor:pointer" onclick="fillForm('{{s[1]}}','{{s[2]}}','{{s[3]}}','{{s[4]}}','{{s[5]}}','{{s[6]}}')">
             <td>{{ s[1] }}</td><td>{{ s[2] }}</td><td>{{ s[3] }}</td>
             <td>{{ s[4] }}</td><td>{{ s[5] }}</td><td>{{ s[6] }}</td>
-            <td><a href="/admin/students/{{ dept }}/delete/{{ s[2] }}" onclick="return confirm('Delete {{ s[1] }}?')" class="action-btn" style="background:#c62828;color:#fff">🗑 Delete</a></td>
+            <td style="display:flex;gap:6px">
+              <a href="/admin/student/{{ s[0] }}" onclick="event.stopPropagation()" class="action-btn" style="background:var(--blue2);color:#fff">📖 View Detail</a>
+              <a href="/admin/students/{{ dept }}/delete/{{ s[2] }}" onclick="event.stopPropagation();return confirm('Delete {{ s[1] }}?')" class="action-btn" style="background:#c62828;color:#fff">🗑 Delete</a>
+            </td>
           </tr>
           {% else %}
           <tr><td colspan="7" style="text-align:center;color:var(--gray);padding:30px">No students in {{ dept }}</td></tr>

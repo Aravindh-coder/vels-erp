@@ -262,6 +262,91 @@ def update_student(dept):
     conn.commit(); conn.close()
     return redirect(url_for("admin_students", dept=dept))
 
+@app.route("/admin/student/<int:sid>")
+def admin_student_detail(sid):
+    if not require_admin(): return redirect(url_for("login"))
+    conn = get_db()
+    student = conn.execute("SELECT * FROM students WHERE id=?", (sid,)).fetchone()
+    marks_rows = conn.execute("SELECT * FROM subject_marks WHERE student_id=?", (sid,)).fetchall()
+    att_rows = conn.execute("SELECT * FROM subject_attendance WHERE student_id=?", (sid,)).fetchall()
+    fee_rows = conn.execute("SELECT * FROM fee_records WHERE student_id=?", (sid,)).fetchall()
+    conn.close()
+    return render_template("admin_student_detail.html", student=student,
+        marks_rows=marks_rows, att_rows=att_rows, fee_rows=fee_rows)
+
+@app.route("/admin/student/<int:sid>/marks/add", methods=["POST"])
+def admin_add_marks(sid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("INSERT INTO subject_marks (student_id,subject,internal_marks,exam_marks) VALUES (?,?,?,?)",
+        (sid, d["subject"], d.get("internal_marks",""), d.get("exam_marks","")))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/marks/update/<int:mid>", methods=["POST"])
+def admin_update_marks(sid, mid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("UPDATE subject_marks SET internal_marks=?,exam_marks=? WHERE id=?",
+        (d.get("internal_marks",""), d.get("exam_marks",""), mid))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/marks/delete/<int:mid>")
+def admin_delete_marks(sid, mid):
+    if not require_admin(): return redirect(url_for("login"))
+    conn = get_db(); conn.execute("DELETE FROM subject_marks WHERE id=?", (mid,)); conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/attendance/add", methods=["POST"])
+def admin_add_attendance(sid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("INSERT INTO subject_attendance (student_id,subject,classes_held,classes_attended) VALUES (?,?,?,?)",
+        (sid, d["subject"], d.get("classes_held",0) or 0, d.get("classes_attended",0) or 0))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/attendance/update/<int:aid>", methods=["POST"])
+def admin_update_attendance(sid, aid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("UPDATE subject_attendance SET classes_held=?,classes_attended=? WHERE id=?",
+        (d.get("classes_held",0) or 0, d.get("classes_attended",0) or 0, aid))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/attendance/delete/<int:aid>")
+def admin_delete_attendance(sid, aid):
+    if not require_admin(): return redirect(url_for("login"))
+    conn = get_db(); conn.execute("DELETE FROM subject_attendance WHERE id=?", (aid,)); conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/fees/add", methods=["POST"])
+def admin_add_fee(sid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("INSERT INTO fee_records (student_id,fee_type,amount,paid_amount,due_date,status) VALUES (?,?,?,?,?,?)",
+        (sid, d["fee_type"], d.get("amount","0"), d.get("paid_amount","0"), d.get("due_date",""), d.get("status","Due")))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/fees/delete/<int:fid>")
+def admin_delete_fee(sid, fid):
+    if not require_admin(): return redirect(url_for("login"))
+    conn = get_db(); conn.execute("DELETE FROM fee_records WHERE id=?", (fid,)); conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
+@app.route("/admin/student/<int:sid>/overall/update", methods=["POST"])
+def admin_update_overall(sid):
+    if not require_admin(): return redirect(url_for("login"))
+    d = request.form; conn = get_db()
+    conn.execute("UPDATE students SET course=?,marks=?,attendance=?,admission_no=?,semester=?,section=? WHERE id=?",
+        (d.get("course",""), d.get("marks",""), d.get("attendance",""), d.get("admission_no",""),
+         d.get("semester","I"), d.get("section","A"), sid))
+    conn.commit(); conn.close()
+    return redirect(url_for("admin_student_detail", sid=sid))
+
 @app.route("/admin/students/<dept>/delete/<regno>")
 def delete_student(dept, regno):
     if not require_admin(): return redirect(url_for("login"))

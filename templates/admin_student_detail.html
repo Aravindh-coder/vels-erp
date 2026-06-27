@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--navy2);border-bottom:3px solid var(--blue2);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.topbar h1{font-size:16px;font-weight:700}
+.main{flex:1;padding:20px;display:flex;flex-direction:column;gap:18px}
+.back{color:var(--blue3);text-decoration:none;font-size:13px}
+.panel{background:var(--card);border-radius:10px;border:1px solid #1a2d50;padding:18px 20px}
+.panel h3{font-size:14px;color:var(--blue3);margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field label{display:block;font-size:11px;color:var(--gray);margin-bottom:4px;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{padding:8px 10px;font-size:13px;text-align:left}
+th{background:var(--navy2);color:var(--blue3)}
+td{border-top:1px solid #1a2d50}
+.inline-form{display:flex;gap:8px;align-items:end;margin-top:10px;flex-wrap:wrap}
+.inline-form .field{flex:1;min-width:120px}
+.action-btn{padding:4px 9px;font-size:11px;border:none;border-radius:4px;cursor:pointer;font-weight:600;background:#c62828;color:#fff}
+</style>
+{% endblock %}
+{% block body %}
+<div class="topbar">
+  <h1>👤 {{ student[1] }} — Academic Details</h1>
+  <div style="display:flex;gap:10px">
+    <a href="/admin/students/{{ student[3] }}" class="btn btn-blue" style="font-size:12px;padding:6px 14px">← Back</a>
+    <a href="/logout" class="btn btn-red" style="font-size:12px;padding:6px 14px">🚪 Logout</a>
+  </div>
+</div>
+<div class="main">
+
+  <div class="panel">
+    <h3>Overview</h3>
+    <p style="font-size:13px;color:var(--gray)">Reg No: <b style="color:#fff">{{ student[2] }}</b> &nbsp;|&nbsp; Dept: {{ student[3] }}</p>
+    <form method="POST" action="/admin/student/{{ student[0] }}/overall/update" class="grid" style="margin-top:14px">
+      <div class="field"><label>Course</label><input name="course" value="{{ student[4] }}"></div>
+      <div class="field"><label>Overall Marks</label><input name="marks" value="{{ student[5] }}"></div>
+      <div class="field"><label>Overall Attendance</label><input name="attendance" value="{{ student[6] }}"></div>
+      <div class="field"><label>Admission No</label><input name="admission_no" value="{{ student['admission_no'] }}"></div>
+      <div class="field"><label>Semester</label><input name="semester" value="{{ student['semester'] }}"></div>
+      <div class="field"><label>Section</label><input name="section" value="{{ student['section'] }}"></div>
+      <div style="grid-column:1/-1"><button type="submit" class="btn btn-gold">💾 Save Overview</button></div>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>📊 Subject-wise Internal Marks & Exam Marks</h3>
+    <table>
+      <tr><th>Subject</th><th>Internal</th><th>Exam</th><th>Action</th></tr>
+      {% for r in marks_rows %}
+      <tr>
+        <form method="POST" action="/admin/student/{{ student[0] }}/marks/update/{{ r['id'] }}">
+        <td>{{ r['subject'] }}</td>
+        <td><input name="internal_marks" value="{{ r['internal_marks'] }}" style="width:80px"></td>
+        <td><input name="exam_marks" value="{{ r['exam_marks'] }}" style="width:80px"></td>
+        <td>
+          <button type="submit" class="action-btn" style="background:var(--blue2)">💾 Save</button>
+        </form>
+        <a href="/admin/student/{{ student[0] }}/marks/delete/{{ r['id'] }}" class="action-btn">🗑</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form method="POST" action="/admin/student/{{ student[0] }}/marks/add" class="inline-form">
+      <div class="field"><label>New Subject</label><input name="subject" required></div>
+      <div class="field"><label>Internal</label><input name="internal_marks"></div>
+      <div class="field"><label>Exam</label><input name="exam_marks"></div>
+      <button type="submit" class="btn btn-green">➕ Add Subject</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>📅 Subject-wise Attendance</h3>
+    <table>
+      <tr><th>Subject</th><th>Held</th><th>Attended</th><th>Action</th></tr>
+      {% for r in att_rows %}
+      <tr>
+        <form method="POST" action="/admin/student/{{ student[0] }}/attendance/update/{{ r['id'] }}">
+        <td>{{ r['subject'] }}</td>
+        <td><input name="classes_held" type="number" value="{{ r['classes_held'] }}" style="width:70px"></td>
+        <td><input name="classes_attended" type="number" value="{{ r['classes_attended'] }}" style="width:70px"></td>
+        <td>
+          <button type="submit" class="action-btn" style="background:var(--blue2)">💾 Save</button>
+        </form>
+        <a href="/admin/student/{{ student[0] }}/attendance/delete/{{ r['id'] }}" class="action-btn">🗑</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form method="POST" action="/admin/student/{{ student[0] }}/attendance/add" class="inline-form">
+      <div class="field"><label>New Subject</label><input name="subject" required></div>
+      <div class="field"><label>Held</label><input name="classes_held" type="number"></div>
+      <div class="field"><label>Attended</label><input name="classes_attended" type="number"></div>
+      <button type="submit" class="btn btn-green">➕ Add Subject</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h3>💰 Fee Records</h3>
+    <table>
+      <tr><th>Type</th><th>Amount</th><th>Paid</th><th>Due Date</th><th>Status</th><th>Action</th></tr>
+      {% for r in fee_rows %}
+      <tr>
+        <td>{{ r['fee_type'] }}</td><td>₹{{ r['amount'] }}</td><td>₹{{ r['paid_amount'] }}</td>
+        <td>{{ r['due_date'] }}</td><td>{{ r['status'] }}</td>
+        <td><a href="/admin/student/{{ student[0] }}/fees/delete/{{ r['id'] }}" class="action-btn">🗑</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+    <form method="POST" action="/admin/student/{{ student[0] }}/fees/add" class="inline-form">
+      <div class="field"><label>Fee Type</label><input name="fee_type" required placeholder="Tuition"></div>
+      <div class="field"><label>Amount</label><input name="amount"></div>
+      <div class="field"><label>Paid</label><input name="paid_amount"></div>
+      <div class="field"><label>Due Date</label><input name="due_date" type="date"></div>
+      <div class="field"><label>Status</label>
+        <select name="status"><option>Due</option><option>Paid</option></select>
+      </div>
+      <button type="submit" class="btn btn-green">➕ Add Fee Record</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
