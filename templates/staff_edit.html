@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Staff Profile Entry{% endblock %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.layout{display:flex;flex:1}
+.sidebar{width:190px;background:var(--sidebar-blue);flex-shrink:0}
+.welcome-box{background:var(--yellow);border:1px solid var(--yellow-border);margin:8px;padding:10px 12px;border-radius:3px}
+.welcome-box .lbl{font-size:10px;color:#7a6a2a;font-weight:600}
+.welcome-box .nm{font-size:13px;font-weight:700;color:#3a3208;margin-top:2px}
+.menu-item{display:block;padding:9px 12px;font-size:12.5px;color:#fff;background:var(--sidebar-blue);border-bottom:1px solid rgba(255,255,255,.15)}
+.menu-item:hover{background:var(--sidebar-hover)}
+.main{flex:1;background:#fafbfc}
+.page-title{background:var(--navy);color:#fff;padding:9px 16px;font-size:13px;font-weight:600}
+.form-wrap{max-width:780px;margin:18px auto;background:#fff;border:1px solid var(--border);border-radius:4px;padding:24px 28px}
+.section-label{font-size:12px;font-weight:700;color:var(--blue-dark);text-transform:uppercase;letter-spacing:.4px;margin:18px 0 10px;border-bottom:2px solid var(--border);padding-bottom:6px}
+.section-label:first-child{margin-top:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.field label{display:block;margin-bottom:5px}
+.readonly-box{background:#f4f6f8;border:1px solid var(--border);border-radius:4px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:12.5px;color:var(--gray);margin-bottom:6px}
+.readonly-box div b{color:var(--text-dark)}
+.actions{margin-top:20px;display:flex;gap:10px}
+.full{grid-column:1 / -1}
+</style>
+{% endblock %}
+{% block body %}
+<div class="layout">
+  <div class="sidebar">
+    <div class="welcome-box">
+      <div class="lbl">Welcome</div>
+      <div class="nm">{{ s['name'] }}</div>
+    </div>
+    <a class="menu-item" href="/staff">← Back to Profile</a>
+    <a class="menu-item" href="/logout">Sign Out</a>
+  </div>
+  <div class="main">
+    <div class="page-title">STAFF PROFILE ENTRY</div>
+    <div class="form-wrap">
+      <div class="section-label">Official Details (read-only — contact admin to change)</div>
+      <div class="readonly-box">
+        <div><b>Name:</b> {{ s['name'] }}</div>
+        <div><b>Staff ID:</b> {{ s['staff_id'] }}</div>
+        <div><b>Department:</b> {{ s['dept'] }}</div>
+        <div><b>Position:</b> {{ s['position'] }}</div>
+      </div>
+
+      <form method="POST">
+        <div class="section-label">Personal Details — you can edit these</div>
+        <div class="grid">
+          <div class="field"><label>Date of Birth</label><input type="text" name="dob" value="{{ s['dob'] }}" placeholder="DD-Mon-YYYY"/></div>
+          <div class="field"><label>Gender</label>
+            <select name="gender">
+              <option value="">Select</option>
+              <option value="Male" {% if s['gender']=='Male' %}selected{% endif %}>Male</option>
+              <option value="Female" {% if s['gender']=='Female' %}selected{% endif %}>Female</option>
+              <option value="Other" {% if s['gender']=='Other' %}selected{% endif %}>Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Father's Name</label><input type="text" name="father_name" value="{{ s['father_name'] }}"/></div>
+          <div class="field"><label>Mother's Name</label><input type="text" name="mother_name" value="{{ s['mother_name'] }}"/></div>
+          <div class="field full"><label>Residential Address</label><input type="text" name="address" value="{{ s['address'] }}"/></div>
+          <div class="field"><label>Contact Number</label><input type="text" name="contact" value="{{ s['contact'] }}"/></div>
+          <div class="field"><label>Email</label><input type="email" name="email" value="{{ s['email'] }}"/></div>
+          <div class="field"><label>Community / Caste</label><input type="text" name="community" value="{{ s['community'] }}"/></div>
+          <div class="field"><label>Nationality</label><input type="text" name="nationality" value="{{ s['nationality'] }}"/></div>
+          <div class="field"><label>Religion</label><input type="text" name="religion" value="{{ s['religion'] }}"/></div>
+          <div class="field"><label>Hosteller</label>
+            <select name="hosteller">
+              <option value="No" {% if s['hosteller']=='No' %}selected{% endif %}>No</option>
+              <option value="Yes" {% if s['hosteller']=='Yes' %}selected{% endif %}>Yes</option>
+            </select>
+          </div>
+          <div class="field"><label>Occupation / Annual Income (Rs.)</label><input type="text" name="occupation_income" value="{{ s['occupation_income'] }}"/></div>
+          <div class="field full"><label>District / State</label><input type="text" name="district_state" value="{{ s['district_state'] }}"/></div>
+        </div>
+        <div class="actions">
+          <button type="submit" class="btn btn-blue">💾 Save Changes</button>
+          <a href="/staff" class="btn" style="background:#eee;color:#333">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="footer-bar">
+  <span>User: {{ s['name'] }}</span>
+  <span>eVarsity® ERP Developed by Firstline Infotech Pvt. Ltd., Chennai, INDIA.</span>
+</div>
+{% endblock %}

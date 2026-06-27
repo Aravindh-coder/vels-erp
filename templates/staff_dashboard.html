@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Staff Home Page{% endblock %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.layout{display:flex;flex:1}
+.sidebar{width:190px;background:var(--sidebar-blue);flex-shrink:0}
+.welcome-box{background:var(--yellow);border:1px solid var(--yellow-border);margin:8px;padding:10px 12px;border-radius:3px}
+.welcome-box .lbl{font-size:10px;color:#7a6a2a;font-weight:600}
+.welcome-box .nm{font-size:13px;font-weight:700;color:#3a3208;margin-top:2px}
+.welcome-box .rg{font-size:11px;color:#7a6a2a}
+.menu-item{display:block;padding:9px 12px;font-size:12.5px;color:#fff;background:var(--sidebar-blue);border-bottom:1px solid rgba(255,255,255,.15)}
+.menu-item:hover{background:var(--sidebar-hover)}
+.menu-item.highlight{background:var(--red)}
+.menu-item.highlight:hover{background:var(--red-hover)}
+.main{flex:1;background:#fafbfc}
+.profile-title{background:var(--navy);color:#fff;padding:9px 16px;font-size:13px;font-weight:600}
+.profile-area{display:flex;gap:16px;padding:16px}
+.profile-table-wrap{flex:1;background:#fff;border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.profile-table td:first-child{width:230px;color:var(--text-dark);font-weight:600;background:#f7f9fb;font-size:12.5px}
+.profile-table td:last-child{font-size:13px}
+.photo-card{width:180px;flex-shrink:0;text-align:center}
+.photo-box{width:150px;height:175px;border:1px solid var(--border);background:#f4f6f8;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:50px;color:#aab5be}
+.status{font-size:12px;color:var(--blue-dark);font-weight:600}
+.edit-link{display:inline-block;margin-top:14px;padding:7px 16px;background:var(--blue);color:#fff;border-radius:4px;font-size:12px;font-weight:600}
+.edit-link:hover{background:var(--blue-dark)}
+</style>
+{% endblock %}
+{% block body %}
+<div class="layout">
+  <div class="sidebar">
+    <div class="welcome-box">
+      <div class="lbl">Welcome</div>
+      <div class="nm">{{ s['name'] }}</div>
+      <div class="rg">{{ s['staff_id'] }}</div>
+    </div>
+    <a class="menu-item" href="/staff">Personal Details</a>
+    <a class="menu-item highlight" href="/staff/edit">Staff Profile Entry</a>
+    <a class="menu-item" href="/logout">Sign Out</a>
+  </div>
+  <div class="main">
+    <div class="profile-title">STAFF PROFILE</div>
+    <div class="profile-area">
+      <div class="profile-table-wrap">
+        <table class="profile-table">
+          <tr><td>Staff Name</td><td>{{ s['name'] }}</td></tr>
+          <tr><td>Staff ID</td><td>{{ s['staff_id'] }}</td></tr>
+          <tr><td>Department</td><td>{{ s['dept'] }}</td></tr>
+          <tr><td>Position</td><td>{{ s['position'] }}</td></tr>
+          <tr><td>Institution</td><td>VELS INSTITUTE OF SCIENCE TECHNOLOGY AND ADVANCED STUDIES (VISTAS)</td></tr>
+          <tr><td>D.O.B. / Gender</td><td>{{ s['dob'] or '—' }} / {{ s['gender'] or '—' }}</td></tr>
+          <tr><td>Father Name / Mother Name</td><td>{{ s['father_name'] or '—' }} / {{ s['mother_name'] or '—' }}</td></tr>
+          <tr><td>Residential Address</td><td>{{ s['address'] or '—' }}</td></tr>
+          <tr><td>Contact Number / Email</td><td>{{ s['contact'] or '—' }} / {{ s['email'] or '—' }}</td></tr>
+          <tr><td>Community / Caste</td><td>{{ s['community'] or '—' }}</td></tr>
+          <tr><td>Nationality / Religion</td><td>{{ s['nationality'] or '—' }} / {{ s['religion'] or '—' }}</td></tr>
+          <tr><td>Hosteller</td><td>{{ s['hosteller'] }}</td></tr>
+          <tr><td>Occupation / Annual Income Rs.</td><td>{{ s['occupation_income'] or '—' }}</td></tr>
+          <tr><td>District / State Name</td><td>{{ s['district_state'] or '—' }}</td></tr>
+        </table>
+      </div>
+      <div class="photo-card">
+        <div class="photo-box">🧑‍🏫</div>
+        <div class="status">Current Status: Active</div>
+        <a class="edit-link" href="/staff/edit">✏️ Edit Personal Details</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer-bar">
+  <span>User: {{ s['name'] }} / {{ now.strftime('%a %d-%b-%Y %H:%M:%S') }}</span>
+  <span>eVarsity® ERP Developed by Firstline Infotech Pvt. Ltd., Chennai, INDIA.</span>
+</div>
+{% endblock %}
