@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VELS ERP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+:root{
+  --navy:#0a1628;--navy2:#0f1f3d;--sidebar:#0d1b35;
+  --blue:#1565c0;--blue2:#1976d2;--blue3:#42a5f5;
+  --red:#c62828;--red2:#ef5350;
+  --gold:#f9a825;--green:#2e7d32;--green2:#4caf50;
+  --white:#ffffff;--gray:#b0bec5;--dark:#263238;
+  --card:#132040;--hover:#1a2d50;
+}
+body{background:var(--navy);color:var(--white);min-height:100vh}
+a{text-decoration:none;color:inherit}
+.btn{padding:8px 18px;border:none;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s}
+.btn-blue{background:var(--blue2);color:#fff}.btn-blue:hover{background:var(--blue)}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red2)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:var(--green2)}
+.btn-gold{background:var(--gold);color:#000}.btn-gold:hover{opacity:.9}
+input,select{background:#1a2d50;color:#fff;border:1px solid #2a4070;border-radius:6px;padding:9px 12px;width:100%;font-size:14px;outline:none;transition:.2s}
+input:focus,select:focus{border-color:var(--blue3);box-shadow:0 0 0 2px rgba(66,165,245,.2)}
+table{width:100%;border-collapse:collapse}
+th{background:var(--navy2);color:var(--blue3);padding:12px;text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+td{padding:11px 12px;font-size:14px;border-bottom:1px solid #1a2d50}
+tr:nth-child(even) td{background:#0f1a30}
+tr:hover td{background:#1a2d50}
+</style>
+{% block head %}{% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

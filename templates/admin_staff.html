@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--navy2);border-bottom:3px solid var(--blue2);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.topbar h1{font-size:16px;font-weight:700}
+.layout{display:flex;flex:1}
+.sidebar{width:210px;background:var(--sidebar);border-right:1px solid #1a2d50;padding:12px 0;flex-shrink:0}
+.sidebar .brand{padding:10px 16px 16px;border-bottom:1px solid #1a2d50;margin-bottom:8px}
+.sidebar .brand .title{font-size:14px;font-weight:700;color:#fff}
+.sidebar .brand .sub{font-size:11px;color:var(--gray)}
+.nav-item{display:block;padding:10px 16px;font-size:13px;color:var(--gray);border-left:3px solid transparent;transition:.15s}
+.nav-item:hover,.nav-item.active{background:var(--hover);color:#fff;border-left-color:var(--blue3)}
+.nav-item.danger:hover{background:#2d0a0a;border-left-color:var(--red2);color:#ff6b6b}
+.main{flex:1;display:flex;gap:16px;padding:20px;overflow-y:auto}
+.form-panel{width:240px;flex-shrink:0;background:var(--card);border-radius:10px;padding:20px;border:1px solid #1a2d50;align-self:flex-start}
+.form-panel h3{font-size:14px;font-weight:700;color:var(--green2);margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11px;color:var(--gray);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.table-panel{flex:1;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid #1a2d50;align-self:flex-start}
+.table-header{padding:14px 16px;border-bottom:1px solid #1a2d50}
+.table-header h3{font-size:15px;font-weight:700}
+.action-btn{padding:5px 10px;font-size:11px;border:none;border-radius:4px;cursor:pointer;font-weight:600}
+.footer-bar{background:var(--navy2);border-top:1px solid #1a2d50;padding:10px 24px;font-size:11px;color:#3a5070}
+</style>
+<script>
+function fillForm(id,name,dept,pos){
+  document.getElementById('f_id').value=id;
+  document.getElementById('f_name').value=name;
+  document.getElementById('f_dept').value=dept;
+  document.getElementById('f_pos').value=pos;
+}
+</script>
+{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div><h1>👨‍🏫 Staff Management</h1></div>
+  <div style="display:flex;gap:10px">
+    <a href="/admin" class="btn btn-blue" style="font-size:12px;padding:6px 14px">← Dashboard</a>
+    <a href="/logout" class="btn btn-red" style="font-size:12px;padding:6px 14px">🚪 Logout</a>
+  </div>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand"><div class="title">Admin Panel</div><div class="sub">VELS ERP</div></div>
+    <a class="nav-item" href="/admin">📊 Dashboard</a>
+    <a class="nav-item active" href="/admin/staff">👨‍🏫 Staff</a>
+    <div style="border-top:1px solid #1a2d50;margin:8px 0"></div>
+    <a class="nav-item danger" href="/logout">🚪 Logout</a>
+  </div>
+  <div class="main">
+    <div class="form-panel">
+      <h3>Staff Form</h3>
+      <input type="hidden" id="f_id"/>
+      <div class="field"><label>Name</label><input id="f_name" type="text"/></div>
+      <div class="field"><label>Department</label><input id="f_dept" type="text"/></div>
+      <div class="field"><label>Position</label><input id="f_pos" type="text"/></div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px">
+        <form method="POST" action="/admin/staff/add" id="add-form">
+          <input type="hidden" name="name" id="a_name"/>
+          <input type="hidden" name="dept" id="a_dept"/>
+          <input type="hidden" name="position" id="a_pos"/>
+          <button type="button" class="btn btn-green" style="width:100%" onclick="
+            document.getElementById('a_name').value=document.getElementById('f_name').value;
+            document.getElementById('a_dept').value=document.getElementById('f_dept').value;
+            document.getElementById('a_pos').value=document.getElementById('f_pos').value;
+            document.getElementById('add-form').submit();
+          ">➕ Add</button>
+        </form>
+        <form method="POST" action="/admin/staff/update" id="upd-form">
+          <input type="hidden" name="id" id="u_id"/>
+          <input type="hidden" name="name" id="u_name"/>
+          <input type="hidden" name="dept" id="u_dept"/>
+          <input type="hidden" name="position" id="u_pos"/>
+          <button type="button" class="btn btn-gold" style="width:100%" onclick="
+            document.getElementById('u_id').value=document.getElementById('f_id').value;
+            document.getElementById('u_name').value=document.getElementById('f_name').value;
+            document.getElementById('u_dept').value=document.getElementById('f_dept').value;
+            document.getElementById('u_pos').value=document.getElementById('f_pos').value;
+            document.getElementById('upd-form').submit();
+          ">✏️ Update</button>
+        </form>
+      </div>
+    </div>
+    <div class="table-panel">
+      <div class="table-header"><h3>Staff Members ({{ staffs|length }})</h3></div>
+      <table>
+        <thead><tr><th>Name</th><th>Department</th><th>Position</th><th>Action</th></tr></thead>
+        <tbody>
+          {% for s in staffs %}
+          <tr style="cursor:pointer" onclick="fillForm('{{s[0]}}','{{s[1]}}','{{s[2]}}','{{s[3]}}')">
+            <td>{{ s[1] }}</td><td>{{ s[2] }}</td><td>{{ s[3] }}</td>
+            <td><a href="/admin/staff/delete/{{ s[0] }}" onclick="return confirm('Delete {{ s[1] }}?')" class="action-btn" style="background:#c62828;color:#fff">🗑 Delete</a></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" style="text-align:center;color:var(--gray);padding:30px">No staff added yet</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="footer-bar">eVarsity® ERP • VELS Institute of Science, Technology & Advanced Studies</div>
+{% endblock %}

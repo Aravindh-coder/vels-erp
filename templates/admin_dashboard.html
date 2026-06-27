@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--navy2);border-bottom:3px solid var(--blue2);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.topbar h1{font-size:16px;font-weight:700}
+.layout{display:flex;flex:1}
+.sidebar{width:210px;background:var(--sidebar);border-right:1px solid #1a2d50;padding:12px 0;flex-shrink:0}
+.sidebar .brand{padding:10px 16px 16px;border-bottom:1px solid #1a2d50;margin-bottom:8px}
+.sidebar .brand .title{font-size:14px;font-weight:700;color:#fff}
+.sidebar .brand .sub{font-size:11px;color:var(--gray)}
+.nav-item{display:block;padding:10px 16px;font-size:13px;color:var(--gray);border-left:3px solid transparent;transition:.15s}
+.nav-item:hover,.nav-item.active{background:var(--hover);color:#fff;border-left-color:var(--blue3)}
+.nav-item.danger:hover{background:#2d0a0a;border-left-color:var(--red2);color:#ff6b6b}
+.main{flex:1;padding:24px;overflow-y:auto}
+.page-title{font-size:20px;font-weight:700;margin-bottom:20px}
+.dept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.dept-card{border-radius:10px;overflow:hidden;border:1px solid #1a2d50;transition:.2s}
+.dept-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.dept-card .top{padding:16px 20px 12px;background:var(--card)}
+.dept-card .dept-name{font-size:16px;font-weight:700;color:#fff}
+.dept-card .count{font-size:12px;color:var(--gray);margin-top:4px}
+.dept-card .manage-btn{display:block;text-align:center;padding:10px;font-size:13px;font-weight:600;color:#fff;transition:.2s}
+.footer-bar{background:var(--navy2);border-top:1px solid #1a2d50;padding:10px 24px;font-size:11px;color:#3a5070;display:flex;justify-content:space-between}
+</style>
+{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div><h1>🎓 VELS ERP — Admin Panel</h1><span style="font-size:11px;color:var(--gray)">Vels Institute of Science, Technology & Advanced Studies</span></div>
+  <a href="/logout" class="btn btn-red" style="font-size:12px;padding:6px 14px">🚪 Logout</a>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="brand"><div class="title">Admin Panel</div><div class="sub">VELS ERP</div></div>
+    <a class="nav-item active" href="/admin">📊 Dashboard</a>
+    <a class="nav-item" href="/admin/staff">👨‍🏫 Staff</a>
+    <div style="border-top:1px solid #1a2d50;margin:8px 0"></div>
+    <a class="nav-item danger" href="/logout">🚪 Logout</a>
+  </div>
+  <div class="main">
+    <div class="page-title">📊 Departments in VELS University</div>
+    <div class="dept-grid">
+      {% set colors = {'CSE':'#1565c0','Electronics':'#f9a825','Mechanical':'#c62828','Civil':'#2e7d32','Biotechnology':'#6a1b9a','Management':'#00695c'} %}
+      {% for dept in depts %}
+      {% set color = colors.get(dept, '#1565c0') %}
+      <div class="dept-card" style="border-top:3px solid {{color}}">
+        <div class="top">
+          <div class="dept-name">{{ dept }}</div>
+          <div class="count">{{ dept_counts[dept] }} students enrolled</div>
+        </div>
+        <a class="manage-btn" href="/admin/students/{{ dept }}" style="background:{{color}}">Manage Students →</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div class="footer-bar">
+  <span>Admin</span>
+  <span>eVarsity® ERP • VELS Institute of Science, Technology & Advanced Studies</span>
+</div>
+{% endblock %}

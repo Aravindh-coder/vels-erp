@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--navy2);border-bottom:3px solid var(--blue2);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.topbar h1{font-size:16px;font-weight:700}
+.layout{display:flex;flex:1}
+.sidebar{width:220px;background:var(--sidebar);border-right:1px solid #1a2d50;flex-shrink:0}
+.welcome-box{background:var(--gold);color:#000;padding:14px 16px;margin:12px;border-radius:8px}
+.welcome-box .label{font-size:10px;font-weight:700;text-transform:uppercase;opacity:.7}
+.welcome-box .name{font-size:14px;font-weight:800;margin-top:2px}
+.welcome-box .regno{font-size:11px;opacity:.8}
+.section-label{font-size:10px;color:#3a5070;text-transform:uppercase;letter-spacing:.8px;padding:8px 16px 4px;font-weight:600}
+.menu-item{padding:10px 16px;font-size:13px;color:var(--gray);cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.menu-item:hover,.menu-item.active{background:var(--hover);color:#fff;border-left-color:var(--blue3)}
+.menu-item.red{color:#ff6b6b}.menu-item.red:hover{background:#2d0a0a;border-left-color:var(--red2)}
+.main{flex:1;padding:24px;overflow-y:auto}
+.page-title{font-size:20px;font-weight:700;margin-bottom:20px}
+.stat-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:10px;padding:16px 20px;border:1px solid #1a2d50;border-top:3px solid}
+.stat-card.blue{border-top-color:var(--blue3)}.stat-card.gold{border-top-color:var(--gold)}.stat-card.green{border-top-color:var(--green2)}
+.stat-card .label{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.5px}
+.stat-card .value{font-size:24px;font-weight:800;margin-top:4px}
+.stat-card.blue .value{color:var(--blue3)}.stat-card.gold .value{color:var(--gold)}.stat-card.green .value{color:var(--green2)}
+.profile-grid{display:grid;grid-template-columns:1fr 240px;gap:20px}
+.profile-table-wrap{background:var(--card);border-radius:10px;overflow:hidden;border:1px solid #1a2d50}
+.profile-table td:first-child{color:var(--gray);font-size:12px;text-transform:uppercase;letter-spacing:.5px;width:160px;font-weight:600}
+.photo-card{background:var(--card);border-radius:10px;padding:20px;border:1px solid #1a2d50;text-align:center}
+.photo-placeholder{width:120px;height:150px;background:#1a2d50;border:2px dashed #2a4070;border-radius:8px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:40px}
+.status-badge{display:inline-block;background:#1b3a1b;color:#4caf50;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1px solid #4caf50}
+.footer-bar{background:var(--navy2);border-top:1px solid #1a2d50;padding:10px 24px;display:flex;justify-content:space-between;font-size:11px;color:#3a5070}
+</style>
+{% endblock %}
+{% block body %}
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="background:var(--blue2);padding:4px 10px;border-radius:4px;font-weight:700;font-size:13px">NAAC A++</div>
+    <div><h1>VELS ERP</h1><span style="font-size:11px;color:var(--gray)">Institute of Science, Technology & Advanced Studies</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--gray)">
+    Welcome, <b style="color:#fff">{{ student[1] }}</b>
+    <a href="/logout" class="btn btn-red" style="padding:6px 14px;font-size:12px">🚪 Logout</a>
+  </div>
+</div>
+<div class="layout">
+  <div class="sidebar">
+    <div class="welcome-box">
+      <div class="label">Logged in as</div>
+      <div class="name">{{ student[1] }}</div>
+      <div class="regno">{{ student[2] }}</div>
+    </div>
+    <div class="section-label">Profile</div>
+    <div class="menu-item active">👤 Personal Details</div>
+    <div class="menu-item red">📝 Student Profile Entry</div>
+    <div class="menu-item">🏆 Student Activity</div>
+    <div class="section-label">Academics</div>
+    <div class="menu-item red">📚 Course Registration</div>
+    <div class="menu-item">📋 Semester Wise Subjects</div>
+    <div class="menu-item">📅 Attendance</div>
+    <div class="menu-item">📊 Internal Marks</div>
+    <div class="menu-item red">🎓 Exam Result</div>
+    <div class="section-label">Finance & Exam</div>
+    <div class="menu-item">💰 Fee Details</div>
+    <div class="menu-item">🎫 Hall Ticket</div>
+  </div>
+  <div class="main">
+    <div class="page-title">📋 Student Profile</div>
+    <div class="stat-cards">
+      <div class="stat-card blue"><div class="label">Attendance</div><div class="value">{{ student[6] or '—' }}</div></div>
+      <div class="stat-card gold"><div class="label">Internal Marks</div><div class="value">{{ student[5] or '—' }}</div></div>
+      <div class="stat-card green"><div class="label">Status</div><div class="value" style="font-size:16px;margin-top:8px">✅ Active</div></div>
+    </div>
+    <div class="profile-grid">
+      <div class="profile-table-wrap">
+        <table class="profile-table">
+          <tr><td>Name</td><td>{{ student[1] }}</td></tr>
+          <tr><td>Admission No</td><td>—</td></tr>
+          <tr><td>Register No</td><td>{{ student[2] }}</td></tr>
+          <tr><td>Course</td><td>{{ student[4] or '—' }}</td></tr>
+          <tr><td>Department</td><td>{{ student[3] }}</td></tr>
+          <tr><td>Academic Year</td><td>2024–2025</td></tr>
+          <tr><td>Semester</td><td>I</td></tr>
+          <tr><td>Section</td><td>A</td></tr>
+          <tr><td>Institution</td><td>Vels Institute of Science, Technology & Advanced Studies</td></tr>
+          <tr><td>DOB</td><td>—</td></tr>
+          <tr><td>Gender</td><td>—</td></tr>
+          <tr><td>Father's Name</td><td>—</td></tr>
+          <tr><td>Mother's Name</td><td>—</td></tr>
+          <tr><td>Address</td><td>—</td></tr>
+          <tr><td>Contact No</td><td>—</td></tr>
+          <tr><td>Email</td><td>—</td></tr>
+        </table>
+      </div>
+      <div class="photo-card">
+        <div class="photo-placeholder">🧑‍🎓</div>
+        <div style="font-size:13px;color:var(--gray);margin-bottom:8px">{{ student[1] }}</div>
+        <div class="status-badge">✅ Current Status: Active</div>
+        <div style="margin-top:12px;font-size:11px;color:var(--gray)">{{ student[3] }} • {{ student[4] or 'N/A' }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer-bar">
+  <span>{{ student[1] }} | {{ student[2] }}</span>
+  <span>eVarsity® ERP • VELS Institute of Science, Technology & Advanced Studies</span>
+</div>
+{% endblock %}
