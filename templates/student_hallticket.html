@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.main{flex:1;padding:24px;background:var(--navy);display:flex;justify-content:center}
+.back{display:inline-block;margin-bottom:16px;color:var(--blue3);text-decoration:none;font-size:13px;align-self:flex-start;position:absolute;left:24px;top:24px}
+.ticket{background:var(--card);border:2px solid var(--blue3);border-radius:10px;padding:28px;max-width:480px;width:100%;margin-top:40px}
+.ticket h2{text-align:center;color:var(--blue3);margin-bottom:18px;font-size:18px}
+table{width:100%;border-collapse:collapse}
+td{padding:8px 0;font-size:13px;border-bottom:1px solid #1a2d50}
+td:first-child{color:var(--gray);width:160px}
+.empty{padding:24px;text-align:center;color:var(--gray)}
+</style>
+{% endblock %}
+{% block body %}
+<div class="main" style="position:relative">
+  <a href="/student" class="back">← Back to Profile</a>
+  <div class="ticket">
+    <h2>🎫 Hall Ticket — Exam Eligibility</h2>
+    <table>
+      <tr><td>Name</td><td>{{ s['name'] }}</td></tr>
+      <tr><td>Register No</td><td>{{ s['regno'] }}</td></tr>
+      <tr><td>Department</td><td>{{ s['dept'] }}</td></tr>
+      <tr><td>Course</td><td>{{ s['course'] }}</td></tr>
+      <tr><td>Hall Ticket No</td><td>HT-{{ s['regno'] }}</td></tr>
+    </table>
+    {% if rows %}
+    <table style="margin-top:14px">
+      <tr><td><b>Subjects Eligible</b></td><td></td></tr>
+      {% for r in rows %}<tr><td colspan="2">• {{ r['subject'] }}</td></tr>{% endfor %}
+    </table>
+    {% else %}
+    <div class="empty">Subject list not yet published by admin.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -3,10 +3,8 @@
 <style>
 body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#070f1f 0%,#0a1628 50%,#0d1f40 100%)}
 .login-wrap{width:100%;max-width:420px;padding:20px}
-.logo-fallback{background:var(--navy2);border-radius:8px;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:24px;border:1px solid #1a2d50}
-.badge{background:var(--blue2);color:#fff;padding:8px 12px;border-radius:6px;font-size:11px;font-weight:700;text-align:center;line-height:1.4}
-.vels-text{font-size:22px;font-weight:800;color:#fff;text-align:center;flex:1}
-.vels-text span{display:block;font-size:10px;color:var(--gray);font-weight:400;margin-top:2px}
+.logo-fallback{background:var(--navy2);border-radius:8px;padding:14px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;border:1px solid #1a2d50}
+.logo-fallback img{max-width:100%;max-height:90px;display:block}
 .card{background:var(--card);border-radius:12px;padding:32px;box-shadow:0 8px 32px rgba(0,0,0,.4);border:1px solid #1a2d50}
 .card-header{background:var(--blue2);margin:-32px -32px 24px;border-radius:12px 12px 0 0;padding:16px 24px;text-align:center}
 .card-header h2{font-size:17px;font-weight:700;letter-spacing:.5px}
@@ -23,9 +21,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;bac
 {% block body %}
 <div class="login-wrap">
   <div class="logo-fallback">
-    <div class="badge">NAAC<br>A++</div>
-    <div class="vels-text">VELS<span>Institute of Science, Technology & Advanced Studies</span></div>
-    <div class="badge">Category<br>1</div>
+    <img src="{{ url_for('static', filename='vels_logo.png') }}" alt="VELS Logo">
   </div>
   <div class="card">
     <div class="card-header"><h2>🎓 VELS Students Log In</h2></div>
@@ -43,6 +39,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;bac
     </form>
     <div class="hint">
       <b>Student:</b> Username = Full Name in CAPITALS &nbsp;|&nbsp; Password = Reg No<br>
+      <b>Staff:</b> Username = Full Name &nbsp;|&nbsp; Password = Staff ID<br>
       <b>Admin:</b> Username = ADMIN &nbsp;|&nbsp; Password = 1234
     </div>
   </div>

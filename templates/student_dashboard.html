@@ -11,7 +11,7 @@ body{display:flex;flex-direction:column;min-height:100vh}
 .welcome-box .name{font-size:14px;font-weight:800;margin-top:2px}
 .welcome-box .regno{font-size:11px;opacity:.8}
 .section-label{font-size:10px;color:#3a5070;text-transform:uppercase;letter-spacing:.8px;padding:8px 16px 4px;font-weight:600}
-.menu-item{padding:10px 16px;font-size:13px;color:var(--gray);cursor:pointer;border-left:3px solid transparent;transition:.15s}
+.menu-item{display:block;padding:10px 16px;font-size:13px;color:var(--gray);cursor:pointer;border-left:3px solid transparent;transition:.15s;text-decoration:none}
 .menu-item:hover,.menu-item.active{background:var(--hover);color:#fff;border-left-color:var(--blue3)}
 .menu-item.red{color:#ff6b6b}.menu-item.red:hover{background:#2d0a0a;border-left-color:var(--red2)}
 .main{flex:1;padding:24px;overflow-y:auto}
@@ -50,18 +50,17 @@ body{display:flex;flex-direction:column;min-height:100vh}
       <div class="regno">{{ student[2] }}</div>
     </div>
     <div class="section-label">Profile</div>
-    <div class="menu-item active">👤 Personal Details</div>
-    <div class="menu-item red">📝 Student Profile Entry</div>
-    <div class="menu-item">🏆 Student Activity</div>
+    <a href="/student" class="menu-item active">👤 Personal Details</a>
+    <a href="/student/edit" class="menu-item red">📝 Student Profile Entry</a>
+    <a href="/student/activity" class="menu-item">🏆 Student Activity</a>
     <div class="section-label">Academics</div>
-    <div class="menu-item red">📚 Course Registration</div>
-    <div class="menu-item">📋 Semester Wise Subjects</div>
-    <div class="menu-item">📅 Attendance</div>
-    <div class="menu-item">📊 Internal Marks</div>
-    <div class="menu-item red">🎓 Exam Result</div>
+    <a href="/student/courses" class="menu-item red">📚 Course Registration</a>
+    <a href="/student/marks" class="menu-item">📊 Internal Marks</a>
+    <a href="/student/attendance" class="menu-item">📅 Attendance</a>
+    <a href="/student/result" class="menu-item red">🎓 Exam Result</a>
     <div class="section-label">Finance & Exam</div>
-    <div class="menu-item">💰 Fee Details</div>
-    <div class="menu-item">🎫 Hall Ticket</div>
+    <a href="/student/fees" class="menu-item">💰 Fee Details</a>
+    <a href="/student/hallticket" class="menu-item">🎫 Hall Ticket</a>
   </div>
   <div class="main">
     <div class="page-title">📋 Student Profile</div>
@@ -74,21 +73,20 @@ body{display:flex;flex-direction:column;min-height:100vh}
       <div class="profile-table-wrap">
         <table class="profile-table">
           <tr><td>Name</td><td>{{ student[1] }}</td></tr>
-          <tr><td>Admission No</td><td>—</td></tr>
+          <tr><td>Admission No</td><td>{{ student['admission_no'] or '—' }}</td></tr>
           <tr><td>Register No</td><td>{{ student[2] }}</td></tr>
           <tr><td>Course</td><td>{{ student[4] or '—' }}</td></tr>
           <tr><td>Department</td><td>{{ student[3] }}</td></tr>
-          <tr><td>Academic Year</td><td>2024–2025</td></tr>
-          <tr><td>Semester</td><td>I</td></tr>
-          <tr><td>Section</td><td>A</td></tr>
+          <tr><td>Semester</td><td>{{ student['semester'] or 'I' }}</td></tr>
+          <tr><td>Section</td><td>{{ student['section'] or 'A' }}</td></tr>
           <tr><td>Institution</td><td>Vels Institute of Science, Technology & Advanced Studies</td></tr>
-          <tr><td>DOB</td><td>—</td></tr>
-          <tr><td>Gender</td><td>—</td></tr>
-          <tr><td>Father's Name</td><td>—</td></tr>
-          <tr><td>Mother's Name</td><td>—</td></tr>
-          <tr><td>Address</td><td>—</td></tr>
-          <tr><td>Contact No</td><td>—</td></tr>
-          <tr><td>Email</td><td>—</td></tr>
+          <tr><td>DOB</td><td>{{ student['dob'] or '—' }}</td></tr>
+          <tr><td>Gender</td><td>{{ student['gender'] or '—' }}</td></tr>
+          <tr><td>Father's Name</td><td>{{ student['father_name'] or '—' }}</td></tr>
+          <tr><td>Mother's Name</td><td>{{ student['mother_name'] or '—' }}</td></tr>
+          <tr><td>Address</td><td>{{ student['address'] or '—' }}</td></tr>
+          <tr><td>Contact No</td><td>{{ student['contact'] or '—' }}</td></tr>
+          <tr><td>Email</td><td>{{ student['email'] or '—' }}</td></tr>
         </table>
       </div>
       <div class="photo-card">

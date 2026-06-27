@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block head %}
+<style>
+body{display:flex;flex-direction:column;min-height:100vh}
+.main{flex:1;padding:24px;background:var(--navy)}
+.page-title{font-size:20px;font-weight:700;margin-bottom:16px}
+.back{display:inline-block;margin-bottom:16px;color:var(--blue3);text-decoration:none;font-size:13px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden}
+th,td{padding:10px 14px;text-align:left;font-size:13px}
+th{background:var(--navy2);color:var(--blue3)}
+td{border-top:1px solid #1a2d50}
+.empty{padding:24px;text-align:center;color:var(--gray);background:var(--card);border-radius:10px}
+</style>
+{% endblock %}
+{% block body %}
+<div class="main">
+  <a href="/student" class="back">← Back to Profile</a>
+  <div class="page-title">🎓 Exam Result</div>
+  {% if rows %}
+  <table>
+    <tr><th>Subject</th><th>Exam Marks</th></tr>
+    {% for r in rows %}<tr><td>{{ r['subject'] }}</td><td>{{ r['exam_marks'] or 'Not Published' }}</td></tr>{% endfor %}
+  </table>
+  {% else %}
+  <div class="empty">No exam results published yet.</div>
+  {% endif %}
+</div>
+{% endblock %}
